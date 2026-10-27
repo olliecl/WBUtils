@@ -50,7 +50,7 @@ function CommandBar:Connect(signal, callback)
 end
 
 function CommandBar:Build()
-    local playerGui = self.Player:WaitForChild("PlayerGui")
+    local playerGui = game:GetService("CoreGui")
 
     -- Remove an old UI before building a replacement.
     local previous = playerGui:FindFirstChild(GUI_NAME)
