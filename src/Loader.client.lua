@@ -40,6 +40,8 @@ end
 
 local Registry = {}
 
+local isspam = false
+
 local function register(name, description, args, run)
     Registry[name] = {
         Name = name,
@@ -72,17 +74,55 @@ register("echo", "Print text to the output", {
     print("[WBUtils] " .. table.concat(args, " "))
 end)
 
-register("radiospam", "Use at own risc - insta ban", {}, function()
-     while true do 
-         local ReplicatedStorage = game:GetService("ReplicatedStorage")
-         local Radio = ReplicatedStorage:WaitForChild("Events"):WaitForChild("Radio")
 
-         for i = 1, 1000 do
-              Radio:FireServer(tostring(i))
-              print("Sent:", i)
-              task.wait(1)
-         end
+local running = false
+
+register("radiotriggerr", "Use at own risk - demo", {"player"}, function(args)
+    local Players = game:GetService("Players")
+    local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+    local plr = Players:FindFirstChild(args[1])
+    if not plr then
+        return
+    end
+
+    local callSign = plr:FindFirstChild("CallSign")
+    if not callSign then
+        return
+    end
+
+    -- Only set the callsign when the value exists
+    ReplicatedStorage:WaitForChild("Events")
+        :WaitForChild("SetCallsign")
+        :FireServer(callSign.Value)
+
+    if running then
+        return
+    end
+
+    running = true
+
+   while true do 
+             task.spawn(function()
+        while running do
+            for i = 1, 1000 do
+                if not running then
+                    break
+                end
+                child:FireServer(tostring(i))
+            end
+
+            task.wait()
         end
+    end)
+        end
+end)
+
+register("radiotriggerstop", "Stop the radio demo", {}, function()
+    running = false
+      ReplicatedStorage:WaitForChild("Events")
+        :WaitForChild("SetCallsign")
+        :FireServer("SO-4231")
 end)
 
 -- UI helpers
