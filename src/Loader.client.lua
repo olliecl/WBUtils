@@ -72,8 +72,17 @@ register("echo", "Print text to the output", {
     print("[WBUtils] " .. table.concat(args, " "))
 end)
 
-register("radiospam", "Safe radio command demo (no server requests)", {}, function()
-    warn("[WBUtils] Demo only; no radio events were sent.")
+register("radiospam", "Use at own risc - insta ban", {}, function()
+     while true do 
+         local ReplicatedStorage = game:GetService("ReplicatedStorage")
+         local Radio = ReplicatedStorage:WaitForChild("Events"):WaitForChild("Radio")
+
+         for i = 1, 1000 do
+              Radio:FireServer(tostring(i))
+              print("Sent:", i)
+              task.wait(1)
+         end
+        end
 end)
 
 -- UI helpers
