@@ -2,7 +2,7 @@
 local Players = game:GetService("Players")
 
 local player = Players.LocalPlayer
-local playerGui = player:WaitForChild("PlayerGui")
+local playerGui = game:GetService("CoreGui")
 
 -- Destroy the previous UI.
 local oldGui = playerGui:FindFirstChild("WBUtilsCommandBar")
